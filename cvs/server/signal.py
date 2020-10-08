@@ -28,7 +28,10 @@ class WebApplication(web.Application):
     """ Signal
     """
 
-    def __init__(self, janus_url, **kwargs):
+    def __init__(self, db, janus_url, **kwargs):
+        super().__init__(**kwargs)
+        self.db = db
+        self.add_routes(routes)
         self.__state = {
             'requests': {
                 'started': 0,
@@ -37,8 +40,6 @@ class WebApplication(web.Application):
             },
             'janus_url': janus_url
         }
-        super().__init__(**kwargs)
-        self.add_routes(routes)
 
     @property
     def state(self):
