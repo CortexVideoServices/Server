@@ -1,4 +1,4 @@
-# Backend python SDK for the Cortex Video Services 
+# Server side of the Cortex Video Services SDK 
 
 #### Before install
 It is preferable to use a virtual environment of Python 3.8 and latest 
