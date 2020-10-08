@@ -2,9 +2,13 @@
 .eggs
 *.egg-info
 __pycache__
-.git
-.cache
 build
 dist
-*.md
+.venv
+.env
+
+docker
 .gitignore
+.dockerignore
+docker-compose.*
+README.md

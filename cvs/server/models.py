@@ -12,5 +12,7 @@ class Session(Base):
     id = Column(String, primary_key=True)
     room_num = Column(Integer, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
-    display_name = Column(String)
+    started_at = Column(DateTime, server_default=func.now())
     allow_anonymous = Column(Boolean, default=True)
+    display_name = Column(String)
+    expired_at = Column(DateTime)

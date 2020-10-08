@@ -3,7 +3,7 @@ from aiohttp import web
 routes = web.RouteTableDef()
 
 
-@routes.get('/status')
+@routes.get('/state')
 async def get_status(request: web.Request):
     return web.json_response({
         'status': 'OK'
@@ -11,7 +11,7 @@ async def get_status(request: web.Request):
 
 
 class WebApplication(web.Application):
-    """ Backend API
+    """ API
     """
 
     def __init__(self, *args, **kwargs):

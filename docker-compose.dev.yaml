@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+
+  janus:
+    build:
+      args:
+        - PUBLIC_IP=127.0.0.1
+
+  postgres:
+    build:
+      args:
+        - POSTGRES_DB=cvs
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=123456
+    ports:
+      - 54320:5432
+
+
+  server:
+    build:
+      args:
+        - POSTGRES=postgresql://postgres:123456@postgres:5432/cvs
+    ports:
+      - 5000:5000

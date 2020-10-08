@@ -1,0 +1,54 @@
+version: '3.2'
+
+networks:
+  cvs:
+    external: true
+
+volumes:
+  pgdata_cvs: {}
+
+services:
+
+  janus:
+    image: cvs/janus
+    build:
+      context: docker/janus
+      args:
+        - PUBLIC_IP
+    container_name: cvs-janus
+    networks:
+      - cvs
+    restart: always
+    ports:
+    - 10000-10200:10000-10200/udp
+
+  postgres:
+    image: cvs/postgres
+    build:
+      context: docker/postgres
+      args:
+        - POSTGRES_DB
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+    container_name: cvs-postgres
+    networks:
+      - cvs
+    restart: always
+    volumes:
+      - pgdata_cvs:/var/lib/postgresql/data
+
+  server:
+    image: cvs/server
+    build:
+      context: .
+      dockerfile: docker/server/Dockerfile
+      args:
+        - JANUS=ws://janus:8188/janus-ws
+        - SERVER_PORT=5000
+        - SDK_API_URI=/api
+        - SDK_SIGNAL_URI=/ws
+        - POSTGRES
+    container_name: cvs-server
+    networks:
+      - cvs
+    restart: always

@@ -2,7 +2,7 @@ from setuptools import setup, find_namespace_packages
 import sys
 
 settings = {
-    'name': 'CSV-Backend',
+    'name': 'CVS',
     'version_config': {
         'version_style': {
             'metadata': True,
