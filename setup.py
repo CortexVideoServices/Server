@@ -9,6 +9,7 @@ settings = {
             'dirty': True,
         }
     },
+    'zip_safe': False,
     'setup_requires': ['setuptools-vcs-version'],
     'packages': find_namespace_packages(),
     'install_requires': [

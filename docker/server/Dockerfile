@@ -11,12 +11,12 @@ ENV SDK_API_URI ${SDK_API_URI}
 ARG SDK_SIGNAL_URI
 ENV SDK_SIGNAL_URI ${SDK_SIGNAL_URI}
 ARG DEBUG
-ENV DEBUG ${DEBUG:+-d}
+ENV DEBUG ${DEBUG:-0}
 
-WORKDIR /usr/src
+WORKDIR /usr/src/cvs
 COPY  . .
 RUN python setup.py install
 
-CMD python -m cvs.server -p ${SERVER_PORT} -d ${POSTGRES} -j ${JANUS} -a ${SDK_API_URI} -s ${SDK_SIGNAL_URI} ${DEBUG}
+CMD python -m cvs.server
 
 EXPOSE ${SERVER_PORT}

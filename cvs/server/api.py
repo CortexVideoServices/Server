@@ -2,7 +2,7 @@ import json
 import random
 from aiohttp import web
 from datetime import datetime, timedelta
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import select, insert, delete
 from typing import Optional, Dict
 
 from cvs.tools import JSONEncoder
@@ -12,7 +12,7 @@ routes = web.RouteTableDef()
 json_dumps = lambda obj: json.dumps(obj, cls=JSONEncoder)
 json_response = lambda obj, *args, **kwargs: web.json_response(obj, *args, dumps=json_dumps, **kwargs)
 
-SESSION_EXPIRED_SEC = 15 * 60
+SESSION_EXPIRED = 15 * 60
 
 
 @routes.get('/state')
@@ -40,7 +40,7 @@ async def get_status(request: web.Request):
         if expired_at:
             expired_at = datetime.fromisoformat(expired_at)
         else:
-            expired_at = started_at + timedelta(seconds=SESSION_EXPIRED_SEC)
+            expired_at = started_at + timedelta(seconds=SESSION_EXPIRED)
         session = await app.create_session(started_at, expired_at, display_name, allow_anonymous)
         if session:
             return json_response(session, status=201)

@@ -21,5 +21,6 @@ services:
     build:
       args:
         - POSTGRES=postgresql://postgres:123456@postgres:5432/cvs
+        - DEBUG=yes
     ports:
       - 5000:5000
