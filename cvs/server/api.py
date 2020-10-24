@@ -1,25 +1,14 @@
-import json
 import random
 from aiohttp import web
 from datetime import datetime, timedelta
 from sqlalchemy import select, insert, delete
-from typing import Optional, Dict
-
-from cvs.tools import JSONEncoder
+from typing import Optional
 from cvs.server.models import Session
+from cvs.web import json_response
 
 routes = web.RouteTableDef()
-json_dumps = lambda obj: json.dumps(obj, cls=JSONEncoder)
-json_response = lambda obj, *args, **kwargs: web.json_response(obj, *args, dumps=json_dumps, **kwargs)
 
 SESSION_EXPIRED = 15 * 60
-
-
-@routes.get('/state')
-async def get_status(request: web.Request):
-    return web.json_response({
-        'status': 'OK'
-    })
 
 
 @routes.post('/v1/session')

@@ -5,7 +5,7 @@ Revises:
 Create Date: 2020-10-09 00:19:52.863308
 
 """
-from alembic import op
+from cvs.server.alembic import op
 import sqlalchemy as sa
 
 
