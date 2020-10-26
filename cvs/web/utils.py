@@ -1,13 +1,16 @@
 import json
 from decimal import Decimal
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from aiopg.sa.result import RowProxy
 
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, (date, datetime)):
-            return obj.isoformat()
+            if obj.tzinfo is None:
+                return obj.replace(tzinfo=timezone.utc).isoformat()
+            else:
+                return obj.isoformat()
         if isinstance(obj, Decimal):
             return str(obj)
         if isinstance(obj, RowProxy):

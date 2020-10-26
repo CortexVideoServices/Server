@@ -22,15 +22,19 @@ class ProxyPass(object):
         async def wrapped_handler(request):
             try:
                 return await handler(request)
-            except web.HTTPNotFound:
+            except web.HTTPNotFound as exc:
                 async with aiohttp.ClientSession() as session:
                     url = self.pass_url + request.url.path + '?' + request.url.query_string
-                    resp = await session.request(request.method, url, headers=request.headers, cookies=request.cookies)
-                    body = resp.content
-                    headers = [(name, value) for name, value in resp.headers.items()
-                               if name in ('Content-Type', 'ETag', 'Date')]
-                    if isinstance(resp.content, StreamReader):
-                        body = await resp.content.read()
-                    return web.Response(status=resp.status, reason=resp.reason, headers=headers, body=body)
+                    try:
+                        resp = await session.request(request.method, url, headers=request.headers, cookies=request.cookies)
+                        body = resp.content
+                        headers = [(name, value) for name, value in resp.headers.items()
+                                   if name in ('Content-Type', 'ETag', 'Date')]
+                        if isinstance(resp.content, StreamReader):
+                            body = await resp.content.read()
+                        return web.Response(status=resp.status, reason=resp.reason, headers=headers, body=body)
+                    except Exception:
+                        app.logger.exception("Cannot proxy pass")
+                        raise exc
 
         return wrapped_handler

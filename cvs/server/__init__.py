@@ -30,7 +30,7 @@ class WebApplication(web.Application):
         return dict((k, v) for k, v in self.__state.items())
 
     @classmethod
-    async def factory(cls, postgres_url, api_uri, signal_uri, janus_url, debug=False):
+    async def factory(cls, postgres_dsn, api_uri, signal_uri, janus_url, debug=False):
         logging.basicConfig(level=(logging.DEBUG if debug else logging.WARNING))
-        db_engine = await create_engine(postgres_url)
+        db_engine = await create_engine(postgres_dsn)
         return cls(db_engine, api_uri, signal_uri, janus_url, logger=logging.root)
