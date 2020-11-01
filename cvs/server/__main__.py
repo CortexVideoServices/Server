@@ -2,6 +2,7 @@ import configargparse
 from aiohttp import web
 import cvs.server
 
+
 parser = configargparse.ArgumentParser("CVS Server")
 parser.add_argument('-c', '--config', is_config_file=True, help='config file path')
 parser.add_argument('-j', '--janus-url', required=True, help='URL of Janus', env_var='JANUS_URL')

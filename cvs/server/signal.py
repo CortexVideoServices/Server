@@ -1,7 +1,11 @@
 import logging
 import asyncio
+import json
+from datetime import datetime
 import aiohttp
 from aiohttp import web
+from .models import Session
+from sqlalchemy import select
 
 routes = web.RouteTableDef()
 
@@ -61,7 +65,10 @@ class WebApplication(web.Application):
             if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f'WS_PROXY(${id(ws)}) >> ${msg.data}')
             if msg.type == aiohttp.WSMsgType.TEXT:
-                await janus.send_str(msg.data)
+                if "conferenceSessionId" in msg.data:
+                    await janus.send_str(await self.replace_room(msg.data))
+                else:
+                    await janus.send_str(msg.data)
             elif msg.type == aiohttp.WSMsgType.ERROR:
                 exc = ws.exception()
                 await janus.close(message=f'Remote exception: ${exc}')
@@ -83,3 +90,13 @@ class WebApplication(web.Application):
             await session.close()
             if self.logger.isEnabledFor(logging.DEBUG):
                 self.logger.debug(f'WS_PROXY(${id(ws)}) done')
+
+    async def replace_room(self, data):
+        data = json.loads(data)
+        session_id = data['body'].pop('conferenceSessionId')
+        data['body']['room'] = 1234
+        query = select([Session]).where(Session.id == session_id).where(Session.expired_at > datetime.utcnow())
+        async with self.db.acquire() as connection:
+            if session := await(await connection.execute(query)).first():
+                data['body']['room'] = session.room_num
+        return json.dumps(data)

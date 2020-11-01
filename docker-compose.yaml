@@ -9,6 +9,13 @@ volumes:
 
 services:
 
+  python:
+    image: cvs/python
+    build:
+      context: .
+      dockerfile: docker/python/Dockerfile
+    container_name: cvs-python
+
   janus:
     image: cvs/janus
     build:
@@ -43,12 +50,16 @@ services:
       context: .
       dockerfile: docker/server/Dockerfile
       args:
-        - JANUS=ws://janus:8188/janus-ws
-        - SERVER_PORT=5000
-        - SDK_API_URI=/api
-        - SDK_SIGNAL_URI=/ws
-        - POSTGRES
+        - JANUS_URL=ws://janus:8188/janus-ws
+        - SERVER_PORT=80
+        - SDK_API_URI=/cvs/api
+        - SDK_SIGNAL_URI=/cvs/ws
+        - POSTGRES_DSN
     container_name: cvs-server
+    command: python -m cvs.server
     networks:
       - cvs
+    depends_on:
+      - postgres
+      - janus
     restart: always

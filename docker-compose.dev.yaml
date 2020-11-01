@@ -6,6 +6,8 @@ services:
     build:
       args:
         - PUBLIC_IP=127.0.0.1
+    ports:
+      - 8188:8188
 
   postgres:
     build:
@@ -20,7 +22,7 @@ services:
   server:
     build:
       args:
-        - POSTGRES=postgresql://postgres:123456@postgres:5432/cvs
+        - POSTGRES_DSN=postgresql://postgres:123456@postgres:5432/cvs
         - DEBUG=yes
     ports:
       - 5000:5000
