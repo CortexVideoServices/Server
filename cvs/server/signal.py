@@ -98,5 +98,6 @@ class WebApplication(web.Application):
         query = select([Session]).where(Session.id == session_id).where(Session.expired_at > datetime.utcnow())
         async with self.db.acquire() as connection:
             if session := await(await connection.execute(query)).first():
-                data['body']['room'] = session.room_num
+                data['body']['room'] = int(session.room_num)
+        logging.debug(f'@@@ {data}')
         return json.dumps(data)
