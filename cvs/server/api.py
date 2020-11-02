@@ -105,7 +105,7 @@ class WebApplication(web.Application):
         """ Creates new session
         """
         while True:
-            room_num = random.getrandbits(64)
+            room_num = random.getrandbits(48)
             sha256 = hashlib.sha256(app_id.encode('utf8'))
             sha256.update('{:016X}'.format(room_num).encode('utf8'))
             session_id = sha256.hexdigest()

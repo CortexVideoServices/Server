@@ -94,10 +94,9 @@ class WebApplication(web.Application):
     async def replace_room(self, data):
         data = json.loads(data)
         session_id = data['body'].pop('conferenceSessionId')
-        data['body']['room'] = 1234
-        query = select([Session]).where(Session.id == session_id).where(Session.expired_at > datetime.utcnow())
+        query = select([Session]).where(Session.id == session_id)
         async with self.db.acquire() as connection:
             if session := await(await connection.execute(query)).first():
                 data['body']['room'] = int(session.room_num)
-        logging.debug(f'@@@ {data}')
-        return json.dumps(data)
+        result = json.dumps(data)
+        return result
