@@ -13,7 +13,7 @@ settings = {
     'setup_requires': ['setuptools-vcs-version'],
     'packages': find_namespace_packages(),
     'install_requires': [
-        'aiohttp==3.6.2',
+        'aiohttp==3.7.2',
         'configargparse',
         'SQLAlchemy==1.3.15',
         'psycopg2-binary==2.8.4',
