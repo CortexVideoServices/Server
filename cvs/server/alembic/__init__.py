@@ -12,5 +12,5 @@ def create_database_if_not_exists():
     try:
         engine.execute(f'CREATE DATABASE {database} WITH OWNER postgres')
     except Exception as exc:
-        logging.error(exc)
+        logging.warning(exc)
     engine.dispose()
