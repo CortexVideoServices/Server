@@ -16,18 +16,18 @@ services:
       dockerfile: docker/python/Dockerfile
     container_name: cvs-python
 
-#  janus:
-#    image: cvs/janus
-#    build:
-#      context: docker/janus
-#      args:
-#        - PUBLIC_IP
-#    container_name: cvs-janus
-#    networks:
-#      - cvs
-#    restart: always
-#    ports:
-#    - 10000-10200:10000-10200/udp
+  janus:
+    image: cvs/janus
+    build:
+      context: docker/janus
+      args:
+        - PUBLIC_IP
+    container_name: cvs-janus
+    networks:
+      - cvs
+    restart: always
+    ports:
+    - 10000-10200:10000-10200/udp
 
   postgres:
     image: cvs/postgres
